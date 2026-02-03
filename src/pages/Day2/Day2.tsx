@@ -8,10 +8,22 @@ const policyTypes = [
     { id: 'url_filter', name: 'URL Filtering', icon: Globe, description: 'Filter web access by URL category' },
     { id: 'malware', name: 'Malware Protection', icon: Shield, description: 'Block malware and ransomware' },
     { id: 'atp', name: 'Advanced Threat Protection', icon: Zap, description: 'Detect and prevent advanced threats' },
-    { id: 'casb', name: 'CASB / Shadow IT', icon: Eye, description: 'Monitor cloud application usage' },
+    { id: 'casb', name: 'CASB Inline', icon: Eye, description: 'Monitor cloud application usage' },
     { id: 'tls', name: 'TLS Decryption', icon: Lock, description: 'Inspect encrypted traffic' },
     { id: 'ztna', name: 'Zero Trust Access', icon: Unlock, description: 'Identity-based access control' }
 ];
+
+const CASB_APPS = [
+    'Microsoft 365', 'eBay', 'Twitter', 'LinkedIn', 'Gmail', 'Google Drive',
+    'Google Workspace', 'Facebook', 'Microsoft Teams', 'SharePoint',
+    'Slack', 'Salesforce', 'AWS', 'Dropbox', 'Zoom', 'GitHub', 'Box',
+    'ServiceNow', 'Workday', 'Jira', 'Confluence', 'Zendesk', 'HubSpot',
+    'Trello', 'Asana', 'Bitbucket', 'GitLab', 'Adobe CC', 'Okta', 'DocuSign'
+];
+
+const CASB_ACTIVITIES = ['Login', 'Logout', 'Upload', 'Download', 'Search', 'Like', 'Post', 'Delete', 'Share'];
+
+const MALWARE_EXTENSIONS = ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.exe', '.dll', '.img', '.iso', '.zip', '.rar', '.js', '.vbs', '.ps1', '.jpeg', '.png', '.gif'];
 
 export function Day2Page() {
     const { policies, currentTenantId, togglePolicy, deletePolicy, createPolicy, users } = useStore();
@@ -23,6 +35,28 @@ export function Day2Page() {
     const [newPolicyDesc, setNewPolicyDesc] = useState('');
     const [isCreating, setIsCreating] = useState(false);
 
+    // IP Filter State
+    const [ipConfig, setIpConfig] = useState({ sourceIp: '', destIp: '', sourcePort: '', destPort: '' });
+
+    // URL Filter State
+    const [urlConfig, setUrlConfig] = useState({ domains: '' });
+
+    // Malware State
+    const [malwareConfig, setMalwareConfig] = useState({
+        signatures: [] as string[],
+        inbound: true,
+        outbound: true
+    });
+
+    // ATP State
+    const [atpEnabled, setAtpEnabled] = useState(false);
+
+    // CASB State
+    const [casbSelections, setCasbSelections] = useState<Record<string, string[]>>({});
+
+    // TLS State
+    const [tlsMode, setTlsMode] = useState<'Dynamic Bypass' | 'TLS Decrypt' | 'TLS Bypass'>('TLS Decrypt');
+
     const tenantPolicies = policies.filter(p => p.tenantId === currentTenantId);
     const enabledCount = tenantPolicies.filter(p => p.enabled).length;
 
@@ -30,27 +64,252 @@ export function Day2Page() {
         if (!selectedType || !newPolicyName) return;
         setIsCreating(true);
 
+        let finalDesc = newPolicyDesc;
+        const conditions: any[] = [];
+
+        // Add type-specific info to conditions or description for demo purposes
+        if (selectedType === 'ip_filter') {
+            conditions.push({ field: 'source_ip', operator: 'equals', value: ipConfig.sourceIp || 'Any' });
+            conditions.push({ field: 'dest_ip', operator: 'equals', value: ipConfig.destIp || 'Any' });
+            conditions.push({ field: 'dest_port', operator: 'equals', value: ipConfig.destPort || 'Any' });
+        } else if (selectedType === 'url_filter') {
+            conditions.push({ field: 'url', operator: 'matches', value: urlConfig.domains.split('\n').filter(u => u.trim()) });
+        } else if (selectedType === 'malware') {
+            conditions.push({ field: 'extensions', operator: 'contains', value: malwareConfig.signatures });
+            finalDesc += ` (Direction: ${malwareConfig.inbound ? 'Inbound' : ''} ${malwareConfig.outbound ? 'Outbound' : ''})`;
+        } else if (selectedType === 'atp') {
+            finalDesc += ` (ATP Enabled: ${atpEnabled ? 'Yes' : 'No'})`;
+        } else if (selectedType === 'casb') {
+            const apps = Object.keys(casbSelections);
+            if (apps.length > 0) {
+                conditions.push({ field: 'applications', operator: 'in', value: apps });
+                finalDesc += ` (Activities: ${apps.map(a => `${a}:${casbSelections[a].join(',')}`).join('; ')})`;
+            }
+        } else if (selectedType === 'tls') {
+            finalDesc += ` (Mode: ${tlsMode})`;
+        }
+
         await createPolicy({
             tenantId: currentTenantId!,
             name: newPolicyName,
-            description: newPolicyDesc,
+            description: finalDesc,
             type: selectedType as any,
             enabled: true,
             priority: tenantPolicies.length + 1,
-            conditions: [],
+            conditions,
             actions: [{ type: 'deny' }],
             createdBy: 'user-001'
         });
 
         setIsCreating(false);
         setShowCreateModal(false);
+        // Reset states
         setNewPolicyName('');
         setNewPolicyDesc('');
         setSelectedType(null);
+        setIpConfig({ sourceIp: '', destIp: '', sourcePort: '', destPort: '' });
+        setUrlConfig({ domains: '' });
+        setMalwareConfig({ signatures: [], inbound: true, outbound: true });
+        setAtpEnabled(false);
+        setCasbSelections({});
+        setTlsMode('TLS Decrypt');
     };
 
     const getTypeInfo = (typeId: string) => {
         return policyTypes.find(t => t.id === typeId) || { name: typeId, icon: FileKey };
+    };
+
+    const toggleCasbActivity = (appName: string, activity: string) => {
+        setCasbSelections(prev => {
+            const current = prev[appName] || [];
+            const updated = current.includes(activity)
+                ? current.filter(a => a !== activity)
+                : [...current, activity];
+
+            if (updated.length === 0) {
+                const { [appName]: _, ...rest } = prev;
+                return rest;
+            }
+            return { ...prev, [appName]: updated };
+        });
+    };
+
+    const renderTypeSpecificFields = () => {
+        switch (selectedType) {
+            case 'ip_filter':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <div className="grid-2-col">
+                            <div className="input-group">
+                                <label className="input-label">Source IP</label>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="e.g., 10.0.0.0/24"
+                                    value={ipConfig.sourceIp}
+                                    onChange={e => setIpConfig(prev => ({ ...prev, sourceIp: e.target.value }))}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label className="input-label">Destination IP</label>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="e.g., 8.8.8.8"
+                                    value={ipConfig.destIp}
+                                    onChange={e => setIpConfig(prev => ({ ...prev, destIp: e.target.value }))}
+                                />
+                            </div>
+                        </div>
+                        <div className="grid-2-col">
+                            <div className="input-group">
+                                <label className="input-label">Source Port</label>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="e.g., Any"
+                                    value={ipConfig.sourcePort}
+                                    onChange={e => setIpConfig(prev => ({ ...prev, sourcePort: e.target.value }))}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label className="input-label">Destination Port</label>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="e.g., 443"
+                                    value={ipConfig.destPort}
+                                    onChange={e => setIpConfig(prev => ({ ...prev, destPort: e.target.value }))}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                );
+            case 'url_filter':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <div className="input-group">
+                            <label className="input-label">Domains / URLs</label>
+                            <textarea
+                                className="input textarea"
+                                placeholder="Enter one URL per line (e.g., facebook.com)"
+                                value={urlConfig.domains}
+                                onChange={e => setUrlConfig({ domains: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                );
+            case 'malware':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <div className="input-group">
+                            <label className="input-label">Direction</label>
+                            <div className="checkbox-group">
+                                <label className="checkbox-item">
+                                    <input
+                                        type="checkbox"
+                                        checked={malwareConfig.inbound}
+                                        onChange={e => setMalwareConfig(prev => ({ ...prev, inbound: e.target.checked }))}
+                                    />
+                                    <span>Inbound</span>
+                                </label>
+                                <label className="checkbox-item">
+                                    <input
+                                        type="checkbox"
+                                        checked={malwareConfig.outbound}
+                                        onChange={e => setMalwareConfig(prev => ({ ...prev, outbound: e.target.checked }))}
+                                    />
+                                    <span>Outbound</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div className="input-group">
+                            <label className="input-label">Malware Signatures (Extensions)</label>
+                            <div className="extension-grid">
+                                {MALWARE_EXTENSIONS.map(ext => (
+                                    <label key={ext} className={`extension-chip ${malwareConfig.signatures.includes(ext) ? 'active' : ''}`}>
+                                        <input
+                                            type="checkbox"
+                                            checked={malwareConfig.signatures.includes(ext)}
+                                            onChange={() => setMalwareConfig(prev => ({
+                                                ...prev,
+                                                signatures: prev.signatures.includes(ext)
+                                                    ? prev.signatures.filter(s => s !== ext)
+                                                    : [...prev.signatures, ext]
+                                            }))}
+                                        />
+                                        <span>{ext}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            case 'atp':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <div className="atp-status-card">
+                            <div className="atp-info">
+                                <Zap className="atp-icon" size={24} />
+                                <div>
+                                    <div className="atp-title">Cloud Subscription Scaling</div>
+                                    <div className="atp-subtitle">Advanced threat detection & sandboxing enabled</div>
+                                </div>
+                            </div>
+                            <button
+                                className={`btn ${atpEnabled ? 'btn-primary' : 'btn-secondary'}`}
+                                onClick={() => setAtpEnabled(!atpEnabled)}
+                            >
+                                {atpEnabled ? 'Enabled' : 'Enable ATP'}
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 'casb':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <label className="input-label">Configure Application Activities</label>
+                        <div className="casb-container">
+                            {CASB_APPS.map(app => (
+                                <div key={app} className="casb-app-row">
+                                    <div className="casb-app-name">{app}</div>
+                                    <div className="casb-activities">
+                                        {CASB_ACTIVITIES.map(activity => (
+                                            <label key={`${app}-${activity}`} className="activity-checkbox">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={(casbSelections[app] || []).includes(activity)}
+                                                    onChange={() => toggleCasbActivity(app, activity)}
+                                                />
+                                                <span>{activity}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'tls':
+                return (
+                    <div className="type-specific-fields animate-fade-in">
+                        <label className="input-label">TLS Inspection Mode</label>
+                        <div className="tls-button-group">
+                            {(['Dynamic Bypass', 'TLS Decrypt', 'TLS Bypass'] as const).map(mode => (
+                                <button
+                                    key={mode}
+                                    className={`tls-btn ${tlsMode === mode ? 'active' : ''}`}
+                                    onClick={() => setTlsMode(mode)}
+                                >
+                                    {mode}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
@@ -312,6 +571,9 @@ export function Day2Page() {
                                     onChange={e => setNewPolicyDesc(e.target.value)}
                                 />
                             </div>
+
+                            {/* Type Specific Fields */}
+                            {renderTypeSpecificFields()}
                         </div>
 
                         <div className="modal-footer">

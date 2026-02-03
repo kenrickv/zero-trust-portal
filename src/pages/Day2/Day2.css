@@ -426,6 +426,176 @@
     resize: vertical;
 }
 
+/* Type Specific Fields */
+.type-specific-fields {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-primary);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+.checkbox-group {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.checkbox-item input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-primary);
+}
+
+.extension-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.extension-chip {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.extension-chip input {
+    display: none;
+}
+
+.extension-chip:hover {
+    border-color: var(--accent-primary);
+}
+
+.extension-chip.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+.atp-status-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.atp-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.atp-icon {
+    color: var(--accent-primary);
+}
+
+.atp-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.atp-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.casb-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+}
+
+.casb-app-row {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.casb-app-row:last-child {
+    border-bottom: none;
+}
+
+.casb-app-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--accent-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.casb-activities {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.activity-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.activity-checkbox input {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent-primary);
+}
+
+.tls-button-group {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.tls-btn {
+    flex: 1;
+    padding: var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tls-btn:hover {
+    border-color: var(--border-accent);
+}
+
+.tls-btn.active {
+    border-color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-primary);
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .policy-types-grid {
