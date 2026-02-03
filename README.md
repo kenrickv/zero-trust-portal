@@ -25,7 +25,7 @@ The **Access Simulation** feature demonstrates real-time Zero Trust policy evalu
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/zero-trust-portal.git
+git clone https://github.com/kenrickvaz-brillio/zero-trust-portal.git
 cd zero-trust-portal
 
 # Install dependencies
