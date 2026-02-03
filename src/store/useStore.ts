@@ -25,6 +25,7 @@ interface AppState {
     // UI State
     isLoading: boolean;
     simulationMode: boolean;
+    theme: 'dark' | 'light';
 
     // Actions
     setCurrentRole: (role: UserRole) => void;
@@ -32,6 +33,7 @@ interface AppState {
     setCurrentPhase: (phase: JourneyPhase) => void;
     setLoading: (loading: boolean) => void;
     setSimulationMode: (mode: boolean) => void;
+    toggleTheme: () => void;
 
     // Tenant actions
     createTenant: (tenant: Omit<Tenant, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Tenant>;
@@ -90,12 +92,14 @@ export const useStore = create<AppState>()(
             securityEvents: mockSecurityEvents,
             isLoading: false,
             simulationMode: false,
+            theme: 'dark',
 
             setCurrentRole: (role) => set({ currentRole: role }),
             setCurrentTenantId: (id) => set({ currentTenantId: id }),
             setCurrentPhase: (phase) => set({ currentPhase: phase }),
             setLoading: (loading) => set({ isLoading: loading }),
             setSimulationMode: (mode) => set({ simulationMode: mode }),
+            toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
 
             createTenant: async (tenantData) => {
                 await apiDelay(1000);
@@ -355,7 +359,8 @@ export const useStore = create<AppState>()(
                 securityEvents: state.securityEvents,
                 currentRole: state.currentRole,
                 currentTenantId: state.currentTenantId,
-                currentPhase: state.currentPhase
+                currentPhase: state.currentPhase,
+                theme: state.theme
             })
         }
     )

@@ -57,7 +57,7 @@ export function Day2Page() {
         <div className="day2-page">
             <div className="page-header">
                 <div className="page-header-content">
-                    <h1>Day 2: Policy Creation & Access Validation</h1>
+                    <h1>Policy</h1>
                     <p>Configure security policies and validate Zero Trust access decisions</p>
                 </div>
             </div>

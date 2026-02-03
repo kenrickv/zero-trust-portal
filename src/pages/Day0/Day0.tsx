@@ -112,7 +112,7 @@ export function Day0Page() {
         <div className="day0-page">
             <div className="page-header">
                 <div className="page-header-content">
-                    <h1>Day 0: Tenant & Identity Onboarding</h1>
+                    <h1>User Management</h1>
                     <p>Create your tenant, connect identity providers, and import users to begin Zero Trust deployment</p>
                 </div>
             </div>
@@ -408,11 +408,11 @@ export function Day0Page() {
                                     <CheckCircle2 size={32} />
                                 </div>
                                 <div className="success-content">
-                                    <h3>Day 0 Complete!</h3>
-                                    <p>Your tenant is ready. Proceed to Day 1 to begin device onboarding.</p>
+                                    <h3>User Management Ready!</h3>
+                                    <p>Your tenant is ready. Proceed to Device management to begin onboarding.</p>
                                 </div>
                                 <a href="/day1" className="btn btn-primary btn-lg">
-                                    Continue to Day 1
+                                    Continue to Device management
                                     <ChevronRight size={18} />
                                 </a>
                             </div>

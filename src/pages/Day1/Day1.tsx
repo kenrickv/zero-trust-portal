@@ -128,7 +128,7 @@ export function Day1Page() {
         <div className="day1-page">
             <div className="page-header">
                 <div className="page-header-content">
-                    <h1>Day 1: Device Onboarding & Compliance</h1>
+                    <h1>Device Management</h1>
                     <p>Discover devices, deploy endpoint agents, and enforce compliance policies</p>
                 </div>
             </div>
@@ -375,11 +375,11 @@ export function Day1Page() {
                         <CheckCircle2 size={32} />
                     </div>
                     <div className="banner-content">
-                        <h3>Day 1 Complete!</h3>
-                        <p>All devices are compliant. Proceed to Day 2 to configure access policies.</p>
+                        <h3>Device Management Ready!</h3>
+                        <p>All devices are compliant. Proceed to Policy to configure access policies.</p>
                     </div>
                     <a href="/day2" className="btn btn-primary btn-lg">
-                        Continue to Day 2
+                        Continue to Policy
                         <ChevronRight size={18} />
                     </a>
                 </div>

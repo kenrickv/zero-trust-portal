@@ -3,20 +3,17 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import {
     Shield, Building2, Monitor, FileKey, AlertTriangle,
-    BarChart3, Settings, ChevronRight, Activity, Database,
-    RefreshCw, LogOut, User, Bell, Menu, X
+    BarChart3, Settings, Activity, Database,
+    RefreshCw, LogOut, User, Bell, Menu, X, Sun, Moon
 } from 'lucide-react';
 import './Layout.css';
 
-const journeySteps = [
-    { id: 'day0', label: 'Day 0', description: 'Tenant & Identity', path: '/day0', icon: Building2 },
-    { id: 'day1', label: 'Day 1', description: 'Device Onboarding', path: '/day1', icon: Monitor },
-    { id: 'day2', label: 'Day 2', description: 'Policy & Access', path: '/day2', icon: FileKey },
-    { id: 'ops', label: 'Operations', description: 'Monitor & Enforce', path: '/ops', icon: Activity }
-];
-
 const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
+    { path: '/day0', label: 'User management', icon: Building2 },
+    { path: '/day1', label: 'Device management', icon: Monitor },
+    { path: '/day2', label: 'Policy', icon: FileKey },
+    { path: '/ops', label: 'Monitoring', icon: Activity },
     { path: '/reports', label: 'Reports', icon: Database },
     { path: '/siem', label: 'SIEM', icon: AlertTriangle },
     { path: '/simulation', label: 'Access Simulation', icon: Shield }
@@ -31,7 +28,7 @@ const roleLabels: Record<string, string> = {
 
 export function Layout() {
     const location = useLocation();
-    const { currentRole, setCurrentRole, currentTenantId, tenants, alerts, resetToMockData } = useStore();
+    const { currentRole, setCurrentRole, currentTenantId, tenants, alerts, resetToMockData, theme, toggleTheme } = useStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -51,16 +48,9 @@ export function Layout() {
         setIsMobileMenuOpen(false);
     }, [location.pathname]);
 
-    const getCurrentPhase = () => {
-        const path = location.pathname;
-        if (path.startsWith('/day0')) return 'day0';
-        if (path.startsWith('/day1')) return 'day1';
-        if (path.startsWith('/day2')) return 'day2';
-        if (path.startsWith('/ops')) return 'ops';
-        return null;
-    };
-
-    const currentPhase = getCurrentPhase();
+    useEffect(() => {
+        document.body.className = theme;
+    }, [theme]);
 
     return (
         <div className="layout">
@@ -81,37 +71,10 @@ export function Layout() {
                     <span className="logo-badge">ISP Managed</span>
                 </div>
 
-                <div className="header-center">
-                    <div className="journey-nav">
-                        {journeySteps.map((step, index) => {
-                            const Icon = step.icon;
-                            const isActive = currentPhase === step.id;
-                            const isPast = journeySteps.findIndex(s => s.id === currentPhase) > index;
-
-                            return (
-                                <div key={step.id} className="journey-step-wrapper">
-                                    <NavLink
-                                        to={step.path}
-                                        className={`journey-step ${isActive ? 'active' : ''} ${isPast ? 'completed' : ''}`}
-                                    >
-                                        <div className="journey-step-icon">
-                                            <Icon size={16} />
-                                        </div>
-                                        <div className="journey-step-content">
-                                            <span className="journey-step-label">{step.label}</span>
-                                            <span className="journey-step-desc">{step.description}</span>
-                                        </div>
-                                    </NavLink>
-                                    {index < journeySteps.length - 1 && (
-                                        <ChevronRight size={16} className="journey-step-arrow" />
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-
                 <div className="header-right">
+                    <button className="header-btn" title="Toggle Theme" onClick={toggleTheme}>
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
                     <button className="header-btn" title="Notifications">
                         <Bell size={18} />
                         {newAlerts > 0 && <span className="notification-badge">{newAlerts}</span>}

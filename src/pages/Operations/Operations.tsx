@@ -53,7 +53,7 @@ export function OperationsPage() {
         <div className="operations-page">
             <div className="page-header">
                 <div className="page-header-content">
-                    <h1>Security Operations</h1>
+                    <h1>Monitoring</h1>
                     <p>Monitor alerts, execute enforcement actions, and review audit trails</p>
                 </div>
             </div>
