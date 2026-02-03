@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Building2, Users, Link2, CheckCircle2, XCircle, Loader2, ChevronRight, Plus, RefreshCw, Shield, Globe } from 'lucide-react';
+import { Building2, Users, Link2, CheckCircle2, XCircle, Loader2, ChevronRight, RefreshCw, Shield, Globe } from 'lucide-react';
 import './Day0.css';
 
-type IAMProvider = 'entra_id' | 'okta' | 'ping' | 'custom';
+type IAMProvider = 'entra_id' | 'okta' | 'ping' | 'local' | 'custom';
 
 const iamProviders: { id: IAMProvider; name: string; logo: string }[] = [
     { id: 'entra_id', name: 'Microsoft Entra ID', logo: '🔷' },
     { id: 'okta', name: 'Okta', logo: '🟦' },
     { id: 'ping', name: 'Ping Identity', logo: '🔶' },
-    { id: 'custom', name: 'Custom SAML/OIDC', logo: '⚙️' }
+    { id: 'local', name: 'Local Authentication', logo: '👤' },
+    { id: 'custom', name: 'Custom SAML/LDAP', logo: '⚙️' }
 ];
 
 const ispPlans = [
@@ -38,7 +39,7 @@ export function Day0Page() {
     const tenantGroups = groups.filter(g => g.tenantId === currentTenantId);
 
     const steps = [
-        { id: 0, title: 'Create Tenant', icon: Building2 },
+        { id: 0, title: 'Tenant Name', icon: Building2 },
         { id: 1, title: 'Connect IAM', icon: Link2 },
         { id: 2, title: 'Import Users', icon: Users },
         { id: 3, title: 'Verify Setup', icon: CheckCircle2 }
@@ -100,7 +101,7 @@ export function Day0Page() {
     const getChecklistStatus = () => {
         if (!currentTenant) return [];
         return [
-            { label: 'Tenant Created', completed: true, icon: Building2 },
+            { label: 'Tenant Provisioned', completed: true, icon: Building2 },
             { label: 'Domain Verified', completed: currentTenant.domainVerified, icon: Globe },
             { label: 'IAM Connected', completed: currentTenant.iamConnected, icon: Link2 },
             { label: 'Users Imported', completed: currentTenant.usersImported, icon: Users },
@@ -150,8 +151,8 @@ export function Day0Page() {
                         <div className="panel-header">
                             <Building2 size={24} />
                             <div>
-                                <h2>Create SaaS Tenant</h2>
-                                <p>Set up your organization in the Zero Trust platform</p>
+                                <h2>Tenant Name</h2>
+                                <p>Set up your organization name and primary domain</p>
                             </div>
                         </div>
 
@@ -209,12 +210,12 @@ export function Day0Page() {
                                 {isCreating ? (
                                     <>
                                         <Loader2 size={18} className="spin" />
-                                        Creating Tenant...
+                                        Provisioning Tenant...
                                     </>
                                 ) : (
                                     <>
-                                        <Plus size={18} />
-                                        Create Tenant
+                                        <ChevronRight size={18} />
+                                        Continue to Identity Integration
                                     </>
                                 )}
                             </button>

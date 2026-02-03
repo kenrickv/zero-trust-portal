@@ -3,7 +3,7 @@
 export type UserRole = 'isp_admin' | 'customer_admin' | 'security_analyst' | 'end_user';
 export type JourneyPhase = 'phase1' | 'phase2' | 'day0' | 'day1' | 'day2' | 'ops';
 export type TenantStatus = 'pending' | 'active' | 'suspended' | 'provisioning';
-export type IAMProvider = 'entra_id' | 'okta' | 'ping' | 'custom';
+export type IAMProvider = 'entra_id' | 'okta' | 'ping' | 'local' | 'custom';
 export type EDRProvider = 'crowdstrike' | 'symantec' | 'defender' | 'custom';
 export type DeviceType = 'windows' | 'macos' | 'linux' | 'ios' | 'android';
 export type ComplianceStatus = 'compliant' | 'non_compliant' | 'pending' | 'unknown';

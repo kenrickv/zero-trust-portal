@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Monitor, Shield, CheckCircle2, XCircle, AlertTriangle, Loader2, Laptop, Smartphone, HardDrive, Wifi, WifiOff, RefreshCw, Send, ChevronRight, ChevronDown } from 'lucide-react';
+import { Monitor, Shield, CheckCircle2, XCircle, AlertTriangle, Loader2, Laptop, Smartphone, HardDrive, Wifi, WifiOff, RefreshCw, Send, ChevronRight, ChevronDown, Plus, Zap } from 'lucide-react';
 import './Day1.css';
 
 const edrProviders = [
@@ -223,11 +223,18 @@ export function Day1Page() {
                 <div className="inventory-header">
                     <h3>Device Inventory</h3>
                     <div className="inventory-actions">
+                        <button className="btn btn-secondary" onClick={() => { }}>
+                            <Zap size={16} />
+                            Auto Enrollment
+                        </button>
+                        <button className="btn btn-secondary" onClick={() => { }}>
+                            <Plus size={16} />
+                            Manual Enrollment
+                        </button>
                         <button className="btn btn-secondary" onClick={() => tenantDevices.forEach(d => handlePullPosture(d.id))}>
                             <RefreshCw size={16} />
                             Sync All Posture
                         </button>
-
                     </div>
                 </div>
 
