@@ -168,6 +168,15 @@ npm run build
 npm run preview
 ```
 
+## Deployment
+
+### Azure Static Web Apps
+If you are deploying to Azure Static Web Apps and encounter MIME type errors (e.g., `application/octet-stream`), the project includes a `staticwebapp.config.json` file that:
+- Explicitly defines MIME types for `.js`, `.mjs`, and `.css`.
+- Configures navigation fallback to `index.html` for React Router (SPA) support.
+
+Make sure this file is included in your deployment root.
+
 ## 📄 License
 
 MIT License - feel free to use this demo for presentations and proof-of-concepts.
