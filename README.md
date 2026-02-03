@@ -4,14 +4,16 @@ A frontend-only demo portal showcasing an ISP-offered **Unified Security / Zero 
 
 ![Zero Trust Portal Dashboard](https://img.shields.io/badge/Demo-Live-brightgreen) ![React](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Vite](https://img.shields.io/badge/Vite-7-purple)
 
+### 🔗 [Live Demo](https://zealous-flower-00dfe7d1e.1.azurestaticapps.net/)
+
 ## 🎯 Overview
 
 This demo portal simulates the complete customer journey for a Zero Trust security platform:
 
-- **Day 0**: Tenant provisioning & identity onboarding
-- **Day 1**: Device enrollment & compliance management
-- **Day 2**: Policy creation & access validation
-- **Operations**: Security monitoring, alerts & enforcement
+- **User management**: Tenant provisioning & identity onboarding
+- **Device management**: Device enrollment & compliance management
+- **Policy**: Policy creation & access validation
+- **Monitoring**: Security monitoring, alerts & enforcement
 
 ### ✨ Key WOW Moment
 
@@ -57,11 +59,11 @@ src/
 │   └── Layout.css
 ├── pages/               # Route pages
 │   ├── Dashboard/       # Security posture overview
-│   ├── Day0/            # Tenant & Identity onboarding
-│   ├── Day1/            # Device onboarding & compliance
-│   ├── Day2/            # Policy creation
+│   ├── Day0/            # User management
+│   ├── Day1/            # Device management
+│   ├── Day2/            # Policy
 │   ├── Simulation/      # Access simulation (WOW moment)
-│   ├── Operations/      # Alerts, enforcement, audit
+│   ├── Operations/      # Monitoring
 │   ├── Reports/         # Analytics & reporting
 │   └── SIEM/            # SIEM integration
 ├── store/               # Zustand state management
@@ -76,10 +78,10 @@ src/
 ## 🎨 Features
 
 ### Journey-Based Navigation
-- **Day 0**: Tenant creation, IAM provider integration (Entra ID, Okta, Ping), user/group import
-- **Day 1**: Device enrollment, EDR integration, compliance engine with posture checks
-- **Day 2**: Policy management with 7 policy types (IP Filter, URL Filter, Malware, ATP, CASB, TLS, ZTNA)
-- **Operations**: Real-time alert management, enforcement actions, audit logging
+- **User management**: Tenant creation, IAM provider integration (Entra ID, Okta, Ping), user/group import
+- **Device management**: Device enrollment, EDR integration, compliance engine with posture checks
+- **Policy**: Policy management with 7 policy types (IP Filter, URL Filter, Malware, ATP, CASB, TLS, ZTNA)
+- **Monitoring**: Real-time alert management, enforcement actions, audit logging
 
 ### Security Dashboard
 - Real-time metrics: Users, Devices, Policies, Alerts
