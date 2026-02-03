@@ -19,7 +19,7 @@ const ispPlans = [
 ];
 
 export function Day0Page() {
-    const { tenants, users, groups, currentTenantId, createTenant, updateTenant, importUsers } = useStore();
+    const { tenants, users, groups, currentTenantId, createTenant, updateTenant } = useStore();
     const currentTenant = tenants.find(t => t.id === currentTenantId);
 
     const [activeStep, setActiveStep] = useState(currentTenant?.iamConnected ? 3 : 0);

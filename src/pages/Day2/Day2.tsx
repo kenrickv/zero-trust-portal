@@ -14,7 +14,7 @@ const policyTypes = [
 ];
 
 export function Day2Page() {
-    const { policies, currentTenantId, togglePolicy, deletePolicy, createPolicy, users, devices } = useStore();
+    const { policies, currentTenantId, togglePolicy, deletePolicy, createPolicy, users } = useStore();
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedType, setSelectedType] = useState<string | null>(null);

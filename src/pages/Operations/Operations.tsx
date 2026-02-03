@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { AlertTriangle, Shield, Monitor, User, XCircle, CheckCircle2, Clock, ChevronDown, RefreshCw, Lock, LogOut, Ban, Key, Activity, FileText, Loader2 } from 'lucide-react';
+import { AlertTriangle, Shield, Monitor, User, XCircle, CheckCircle2, Clock, ChevronDown, Lock, LogOut, Ban, Key, FileText, Loader2 } from 'lucide-react';
 import './Operations.css';
 
 export function OperationsPage() {
     const { alerts, users, devices, enforcementRecords, auditLogs, currentTenantId, updateAlert, executeEnforcement, updateDevice, updateUser } = useStore();
 
     const [activeTab, setActiveTab] = useState<'alerts' | 'enforcement' | 'audit'>('alerts');
-    const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
+
     const [isExecuting, setIsExecuting] = useState(false);
     const [expandedAlert, setExpandedAlert] = useState<string | null>(null);
 

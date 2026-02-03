@@ -17,12 +17,12 @@ const complianceRules = [
 ];
 
 export function Day1Page() {
-    const { devices, users, currentTenantId, updateDevice, enrollDevice } = useStore();
+    const { devices, users, currentTenantId, updateDevice } = useStore();
 
     const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
     const [isDeployingAgent, setIsDeployingAgent] = useState(false);
     const [isPullingPosture, setIsPullingPosture] = useState(false);
-    const [showEnrollModal, setShowEnrollModal] = useState(false);
+
     const [expandedDevice, setExpandedDevice] = useState<string | null>(null);
 
     const tenantDevices = devices.filter(d => d.tenantId === currentTenantId);
@@ -227,10 +227,7 @@ export function Day1Page() {
                             <RefreshCw size={16} />
                             Sync All Posture
                         </button>
-                        <button className="btn btn-primary" onClick={() => setShowEnrollModal(true)}>
-                            <Monitor size={16} />
-                            Enroll Device
-                        </button>
+
                     </div>
                 </div>
 

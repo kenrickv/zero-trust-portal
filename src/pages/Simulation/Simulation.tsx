@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Shield, User, Monitor, Globe, CheckCircle2, XCircle, AlertTriangle, Loader2, ChevronRight, Zap, Lock, Unlock, RefreshCw, ArrowRight, Sparkles } from 'lucide-react';
+import { Shield, User, Monitor, Globe, CheckCircle2, XCircle, AlertTriangle, Loader2, Zap, Lock, Unlock, RefreshCw, Sparkles } from 'lucide-react';
 import './Simulation.css';
 
 export function SimulationPage() {
-    const { users, devices, policies, applications, currentTenantId, simulateAccess, updateDevice, updateUser, accessRequests } = useStore();
+    const { users, devices, policies, currentTenantId, simulateAccess, updateDevice, updateUser, accessRequests } = useStore();
 
     const [selectedUserId, setSelectedUserId] = useState<string>('');
     const [selectedDeviceId, setSelectedDeviceId] = useState<string>('');
