@@ -45,6 +45,10 @@
     color: white;
 }
 
+.tab.active::after {
+    display: none;
+}
+
 .tab-badge {
     min-width: 20px;
     height: 20px;
