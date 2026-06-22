@@ -6,6 +6,7 @@ import {
     BarChart3, Settings, Activity, Database,
     RefreshCw, LogOut, User, Bell, Menu, X, Sun, Moon
 } from 'lucide-react';
+import { NotificationsPanel } from './NotificationsPanel';
 import './Layout.css';
 
 const navItems = [
@@ -31,9 +32,10 @@ export function Layout() {
     const { currentRole, setCurrentRole, currentTenantId, tenants, alerts, resetToMockData, theme, toggleTheme } = useStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     const currentTenant = tenants.find(t => t.id === currentTenantId);
-    const newAlerts = alerts.filter(a => a.status === 'new').length;
+    const newAlerts = alerts.filter(a => a.tenantId === currentTenantId && a.status === 'new').length;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -53,6 +55,7 @@ export function Layout() {
     }, [theme]);
 
     return (
+        <>
         <div className="layout">
             {/* Header */}
             <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
@@ -75,7 +78,7 @@ export function Layout() {
                     <button className="header-btn" title="Toggle Theme" onClick={toggleTheme}>
                         {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </button>
-                    <button className="header-btn" title="Notifications">
+                    <button className="header-btn" title="Notifications" onClick={() => setIsNotificationsOpen(v => !v)}>
                         <Bell size={18} />
                         {newAlerts > 0 && <span className="notification-badge">{newAlerts}</span>}
                     </button>
@@ -162,5 +165,7 @@ export function Layout() {
                 </main>
             </div>
         </div>
+        <NotificationsPanel open={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
+        </>
     );
 }

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { Building2, Users, Link2, CheckCircle2, XCircle, Loader2, ChevronRight, RefreshCw, Shield, Globe } from 'lucide-react';
 import './Day0.css';
@@ -22,6 +23,8 @@ const ispPlans = [
 export function Day0Page() {
     const { tenants, users, groups, currentTenantId, createTenant, updateTenant } = useStore();
     const currentTenant = tenants.find(t => t.id === currentTenantId);
+    const [searchParams] = useSearchParams();
+    const highlightId = searchParams.get('highlight');
 
     const [activeStep, setActiveStep] = useState(currentTenant?.iamConnected ? 3 : 0);
     const [isCreating, setIsCreating] = useState(false);
@@ -35,8 +38,22 @@ export function Day0Page() {
     const [selectedPlan, setSelectedPlan] = useState('enterprise_plus');
     const [selectedIAM, setSelectedIAM] = useState<IAMProvider | null>(null);
 
-    const tenantUsers = users.filter(u => u.tenantId === currentTenantId);
+    const allTenantUsers = users.filter(u => u.tenantId === currentTenantId);
     const tenantGroups = groups.filter(g => g.tenantId === currentTenantId);
+
+    // Place highlighted user first so it's always visible even if beyond slice(0,5)
+    const tenantUsers = highlightId
+        ? [
+            ...allTenantUsers.filter(u => u.id === highlightId),
+            ...allTenantUsers.filter(u => u.id !== highlightId)
+          ]
+        : allTenantUsers;
+
+    useEffect(() => {
+        if (!highlightId) return;
+        const el = document.getElementById(`user-row-${highlightId}`);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [highlightId]);
 
     const steps = [
         { id: 0, title: 'Tenant Name', icon: Building2 },
@@ -438,7 +455,11 @@ export function Day0Page() {
                                 </thead>
                                 <tbody>
                                     {tenantUsers.slice(0, 5).map(user => (
-                                        <tr key={user.id}>
+                                        <tr
+                                            key={user.id}
+                                            id={`user-row-${user.id}`}
+                                            className={highlightId === user.id ? 'row-highlight' : ''}
+                                        >
                                             <td>
                                                 <div className="user-cell">
                                                     <div className="user-avatar-sm">{user.displayName[0]}</div>

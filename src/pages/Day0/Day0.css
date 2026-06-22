@@ -1,4 +1,13 @@
 /* Day 0 Page Styles */
+
+@keyframes row-pulse {
+    0% { background-color: rgba(99, 102, 241, 0.25); }
+    100% { background-color: transparent; }
+}
+
+.row-highlight {
+    animation: row-pulse 2s ease-out forwards;
+}
 .day0-page {
     display: flex;
     flex-direction: column;

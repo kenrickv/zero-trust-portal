@@ -1,0 +1,270 @@
+/* Notifications Panel */
+.notifications-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 499;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-base);
+}
+
+.notifications-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.notifications-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 420px;
+    max-width: 100vw;
+    z-index: 500;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.2s ease;
+}
+
+.notifications-panel.open {
+    transform: translateX(0);
+}
+
+.notifications-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+}
+
+.notifications-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.notifications-title h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.notifications-unread-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--accent-primary);
+    color: #fff;
+}
+
+.notifications-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-mark-all {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn-mark-all:hover {
+    color: var(--text-primary);
+    border-color: var(--border-accent);
+}
+
+.btn-close-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.btn-close-panel:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+}
+
+.notifications-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm);
+}
+
+.notifications-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    height: 200px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.notification-card {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-secondary);
+    background: var(--bg-tertiary);
+    margin-bottom: var(--spacing-sm);
+    border-left-width: 3px;
+    transition: background var(--transition-fast);
+}
+
+.notification-card:hover {
+    background: var(--bg-card);
+}
+
+.notification-card.severity-critical {
+    border-left-color: var(--status-error);
+}
+
+.notification-card.severity-high {
+    border-left-color: var(--status-warning);
+}
+
+.notification-card.severity-medium {
+    border-left-color: var(--status-info);
+}
+
+.notification-card.severity-low {
+    border-left-color: var(--status-success);
+}
+
+.notification-card.status-dismissed {
+    opacity: 0.6;
+}
+
+.notification-severity-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notification-severity-icon.critical { color: var(--status-error); }
+.notification-severity-icon.high { color: var(--status-warning); }
+.notification-severity-icon.medium { color: var(--status-info); }
+.notification-severity-icon.low { color: var(--status-success); }
+
+.notification-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    margin-bottom: 4px;
+}
+
+.notification-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.btn-dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast);
+    padding: 0;
+}
+
+.btn-dismiss:hover {
+    color: var(--text-primary);
+}
+
+.notification-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.notification-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.notification-source {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.notification-ctas {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-sm);
+}
+
+.btn-cta {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-accent);
+    background: transparent;
+    color: var(--accent-primary);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btn-cta:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-secondary);
+}

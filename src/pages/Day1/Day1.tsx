@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { Monitor, Shield, CheckCircle2, XCircle, AlertTriangle, Loader2, Laptop, Smartphone, HardDrive, Wifi, WifiOff, RefreshCw, Send, ChevronRight, ChevronDown, Plus, Zap } from 'lucide-react';
 import './Day1.css';
@@ -18,12 +19,20 @@ const complianceRules = [
 
 export function Day1Page() {
     const { devices, users, currentTenantId, updateDevice } = useStore();
+    const [searchParams] = useSearchParams();
+    const highlightId = searchParams.get('highlight');
 
     const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
     const [isDeployingAgent, setIsDeployingAgent] = useState(false);
     const [isPullingPosture, setIsPullingPosture] = useState(false);
 
-    const [expandedDevice, setExpandedDevice] = useState<string | null>(null);
+    const [expandedDevice, setExpandedDevice] = useState<string | null>(highlightId);
+
+    useEffect(() => {
+        if (!highlightId) return;
+        const el = document.getElementById(`device-card-${highlightId}`);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [highlightId]);
 
     const tenantDevices = devices.filter(d => d.tenantId === currentTenantId);
     const tenantUsers = users.filter(u => u.tenantId === currentTenantId);
@@ -246,7 +255,11 @@ export function Day1Page() {
                         const checks = getComplianceChecks(device);
 
                         return (
-                            <div key={device.id} className={`device-card ${device.complianceStatus}`}>
+                            <div
+                                key={device.id}
+                                id={`device-card-${device.id}`}
+                                className={`device-card ${device.complianceStatus}${highlightId === device.id ? ' highlighted' : ''}`}
+                            >
                                 <div className="device-main" onClick={() => setExpandedDevice(isExpanded ? null : device.id)}>
                                     <div className="device-icon-wrapper">
                                         <DeviceIcon size={24} />

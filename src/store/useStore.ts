@@ -55,6 +55,8 @@ interface AppState {
 
     // Alert actions
     updateAlert: (id: string, updates: Partial<Alert>) => void;
+    dismissAlert: (id: string) => void;
+    markAllAlertsRead: () => void;
 
     // Access simulation
     simulateAccess: (userId: string, deviceId: string, destination: string) => Promise<AccessRequest>;
@@ -193,6 +195,24 @@ export const useStore = create<AppState>()(
                 set((state) => ({
                     alerts: state.alerts.map((a) =>
                         a.id === id ? { ...a, ...updates, updatedAt: new Date().toISOString() } : a
+                    )
+                }));
+            },
+
+            dismissAlert: (id) => {
+                const now = new Date().toISOString();
+                set((state) => ({
+                    alerts: state.alerts.map((a) =>
+                        a.id === id ? { ...a, status: 'dismissed', updatedAt: now } : a
+                    )
+                }));
+            },
+
+            markAllAlertsRead: () => {
+                const now = new Date().toISOString();
+                set((state) => ({
+                    alerts: state.alerts.map((a) =>
+                        a.status === 'new' ? { ...a, status: 'dismissed', updatedAt: now } : a
                     )
                 }));
             },
