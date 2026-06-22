@@ -1,4 +1,14 @@
 /* Day 1 Page Styles */
+
+@keyframes card-pulse {
+    0% { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6); }
+    100% { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0); }
+}
+
+.device-card.highlighted {
+    animation: card-pulse 2s ease-out forwards;
+    border-color: var(--accent-primary);
+}
 .day1-page {
     display: flex;
     flex-direction: column;

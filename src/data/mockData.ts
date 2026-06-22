@@ -103,7 +103,9 @@ export const mockAlerts: Alert[] = [
     { id: 'alert-002', tenantId: 'tenant-001', severity: 'high', title: 'Impossible Travel Detected', description: 'User login from multiple geographic locations within 1 hour', source: 'iam', affectedUserId: 'user-006', status: 'investigating', createdAt: yesterday, updatedAt: now },
     { id: 'alert-003', tenantId: 'tenant-001', severity: 'high', title: 'Command & Control Communication', description: 'Device attempted connection to known C2 server', source: 'sse', affectedDeviceId: 'dev-003', ioc: { type: 'ip', value: '185.234.72.14', threat: 'Cobalt Strike C2', confidence: 88 }, status: 'new', createdAt: now, updatedAt: now },
     { id: 'alert-004', tenantId: 'tenant-001', severity: 'medium', title: 'Multiple Failed MFA Attempts', description: 'User experienced 5 failed MFA attempts in 10 minutes', source: 'iam', affectedUserId: 'user-004', status: 'resolved', createdAt: yesterday, updatedAt: yesterday },
-    { id: 'alert-005', tenantId: 'tenant-001', severity: 'low', title: 'Shadow IT Application Detected', description: 'Unauthorized SaaS application usage detected', source: 'sse', affectedUserId: 'user-003', status: 'dismissed', createdAt: lastWeek, updatedAt: lastWeek }
+    { id: 'alert-005', tenantId: 'tenant-001', severity: 'low', title: 'Shadow IT Application Detected', description: 'Unauthorized SaaS application usage detected', source: 'sse', affectedUserId: 'user-003', status: 'dismissed', createdAt: lastWeek, updatedAt: lastWeek },
+    { id: 'alert-006', tenantId: 'tenant-001', severity: 'medium', title: 'Unusual Data Exfiltration Pattern', description: 'Large volume of data transferred to external storage in off-hours window', source: 'sse', affectedUserId: 'user-004', affectedDeviceId: 'dev-004', status: 'new', createdAt: now, updatedAt: now },
+    { id: 'alert-007', tenantId: 'tenant-001', severity: 'high', title: 'Blocked User Access Attempt', description: 'Blocked user account attempted to authenticate via legacy protocol', source: 'iam', affectedUserId: 'user-006', status: 'new', createdAt: yesterday, updatedAt: yesterday }
 ];
 
 // Mock Security Events
