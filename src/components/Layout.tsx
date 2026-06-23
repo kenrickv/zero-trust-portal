@@ -145,7 +145,7 @@ export function Layout() {
                     </nav>
 
                     <div className="sidebar-footer">
-                        <NavLink to="/settings" className="nav-item">
+                        <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                             <Settings size={18} />
                             <span>Settings</span>
                         </NavLink>
