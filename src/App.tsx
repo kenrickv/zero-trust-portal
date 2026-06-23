@@ -8,6 +8,7 @@ import { DashboardPage } from './pages/Dashboard/Dashboard';
 import { OperationsPage } from './pages/Operations/Operations';
 import { ReportsPage } from './pages/Reports/Reports';
 import { SIEMPage } from './pages/SIEM/SIEM';
+import { SettingsPage } from './pages/Settings/Settings';
 import './App.css';
 
 function App() {
@@ -24,19 +25,10 @@ function App() {
           <Route path="simulation" element={<SimulationPage />} />
           <Route path="reports" element={<ReportsPage />} />
           <Route path="siem" element={<SIEMPage />} />
-          <Route path="settings" element={<SettingsPlaceholder />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  );
-}
-
-function SettingsPlaceholder() {
-  return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h2>Settings</h2>
-      <p style={{ color: 'var(--text-secondary)' }}>Settings page coming soon...</p>
-    </div>
   );
 }
 
