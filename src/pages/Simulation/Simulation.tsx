@@ -115,7 +115,7 @@ export function SimulationPage() {
                 </div>
             </div>
 
-            <div className="simulation-layout">
+            <div className={`simulation-layout${hasSimulated ? '' : ' simulation-layout--single'}`}>
                 {/* Configuration Panel */}
                 <div className="config-panel">
                     <div className="panel-section">
@@ -241,10 +241,9 @@ export function SimulationPage() {
                     </div>
                 </div>
 
-                {/* Results Panel */}
-                <div className="results-panel">
-                    {hasSimulated && (
-                        <>
+                {/* Results Panel — only rendered after simulation is triggered */}
+                {hasSimulated && (
+                    <div className="results-panel">
                         <h3>
                             <Shield size={20} />
                             Policy Evaluation Result
@@ -273,135 +272,134 @@ export function SimulationPage() {
                         )}
 
                         {result && (
-                        <div className={`result-card ${result.decision} animate-scale-in`}>
-                            <div className="result-header">
-                                <div className={`result-icon ${result.decision}`}>
-                                    {result.decision === 'allowed' ? (
-                                        <Unlock size={32} />
-                                    ) : (
-                                        <Lock size={32} />
-                                    )}
-                                </div>
-                                <div className="result-summary">
-                                    <h2>Access {result.decision === 'allowed' ? 'Granted' : 'Denied'}</h2>
-                                    <p>
-                                        {result.decision === 'allowed'
-                                            ? 'All Zero Trust requirements satisfied'
-                                            : 'One or more security requirements not met'
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="result-divider" />
-
-                            <div className="evaluation-details">
-                                <h4>Policy Evaluation Details</h4>
-                                <div className="eval-checks">
-                                    {result.evaluationDetails.map((detail, idx) => (
-                                        <div key={idx} className={`eval-check ${detail.passed ? 'passed' : 'failed'}`}>
-                                            <div className="eval-check-icon">
-                                                {detail.passed ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
-                                            </div>
-                                            <div className="eval-check-content">
-                                                <span className="eval-check-name">{detail.check}</span>
-                                                <span className="eval-check-message">{detail.message}</span>
-                                            </div>
-                                            <div className="eval-check-value">
-                                                <span className="value-label">Value:</span>
-                                                <code>{String(detail.value)}</code>
-                                                {detail.required && (
-                                                    <>
-                                                        <span className="value-label">Required:</span>
-                                                        <code>{String(detail.required)}</code>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {result.matchedPolicies.length > 0 && (
-                                <div className="matched-policies">
-                                    <h4>Matched Policies</h4>
-                                    <div className="policies-list">
-                                        {result.matchedPolicies.map(policyId => {
-                                            const policy = tenantPolicies.find(p => p.id === policyId);
-                                            return policy ? (
-                                                <div key={policyId} className="matched-policy">
-                                                    <Shield size={16} />
-                                                    <span>{policy.name}</span>
-                                                </div>
-                                            ) : null;
-                                        })}
+                            <div className={`result-card ${result.decision} animate-scale-in`}>
+                                <div className="result-header">
+                                    <div className={`result-icon ${result.decision}`}>
+                                        {result.decision === 'allowed' ? (
+                                            <Unlock size={32} />
+                                        ) : (
+                                            <Lock size={32} />
+                                        )}
+                                    </div>
+                                    <div className="result-summary">
+                                        <h2>Access {result.decision === 'allowed' ? 'Granted' : 'Denied'}</h2>
+                                        <p>
+                                            {result.decision === 'allowed'
+                                                ? 'All Zero Trust requirements satisfied'
+                                                : 'One or more security requirements not met'
+                                            }
+                                        </p>
                                     </div>
                                 </div>
-                            )}
 
-                            {result.decision === 'denied' && showRemediation && result.remediationSteps && (
-                                <div className="remediation-section animate-slide-up">
-                                    <div className="remediation-header">
-                                        <AlertTriangle size={24} />
-                                        <div>
-                                            <h4>Remediation Required</h4>
-                                            <p>Complete the following steps to gain access</p>
-                                        </div>
-                                    </div>
+                                <div className="result-divider" />
 
-                                    <div className="remediation-steps">
-                                        {result.remediationSteps.map((step, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`remediation-step ${remediationStep > idx ? 'completed' : ''} ${remediationStep === idx + 1 ? 'active' : ''}`}
-                                            >
-                                                <div className="step-number">
-                                                    {remediationStep > idx ? <CheckCircle2 size={16} /> : idx + 1}
+                                <div className="evaluation-details">
+                                    <h4>Policy Evaluation Details</h4>
+                                    <div className="eval-checks">
+                                        {result.evaluationDetails.map((detail, idx) => (
+                                            <div key={idx} className={`eval-check ${detail.passed ? 'passed' : 'failed'}`}>
+                                                <div className="eval-check-icon">
+                                                    {detail.passed ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
                                                 </div>
-                                                <span>{step}</span>
-                                                {remediationStep === idx + 1 && isRemediating && (
-                                                    <Loader2 size={16} className="spin" />
-                                                )}
+                                                <div className="eval-check-content">
+                                                    <span className="eval-check-name">{detail.check}</span>
+                                                    <span className="eval-check-message">{detail.message}</span>
+                                                </div>
+                                                <div className="eval-check-value">
+                                                    <span className="value-label">Value:</span>
+                                                    <code>{String(detail.value)}</code>
+                                                    {detail.required && (
+                                                        <>
+                                                            <span className="value-label">Required:</span>
+                                                            <code>{String(detail.required)}</code>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
-
-                                    {!isRemediating && (
-                                        <button className="btn btn-warning btn-lg full-width" onClick={handleRemediate}>
-                                            <RefreshCw size={18} />
-                                            Auto-Remediate & Retry
-                                        </button>
-                                    )}
                                 </div>
-                            )}
 
-                            {result.decision === 'allowed' && (
-                                <div className="success-message">
-                                    <Sparkles size={24} />
-                                    <span>User can now securely access {result.destination} through the SSE gateway</span>
-                                </div>
-                            )}
-                        </div>
+                                {result.matchedPolicies.length > 0 && (
+                                    <div className="matched-policies">
+                                        <h4>Matched Policies</h4>
+                                        <div className="policies-list">
+                                            {result.matchedPolicies.map(policyId => {
+                                                const policy = tenantPolicies.find(p => p.id === policyId);
+                                                return policy ? (
+                                                    <div key={policyId} className="matched-policy">
+                                                        <Shield size={16} />
+                                                        <span>{policy.name}</span>
+                                                    </div>
+                                                ) : null;
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {result.decision === 'denied' && showRemediation && result.remediationSteps && (
+                                    <div className="remediation-section animate-slide-up">
+                                        <div className="remediation-header">
+                                            <AlertTriangle size={24} />
+                                            <div>
+                                                <h4>Remediation Required</h4>
+                                                <p>Complete the following steps to gain access</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="remediation-steps">
+                                            {result.remediationSteps.map((step, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`remediation-step ${remediationStep > idx ? 'completed' : ''} ${remediationStep === idx + 1 ? 'active' : ''}`}
+                                                >
+                                                    <div className="step-number">
+                                                        {remediationStep > idx ? <CheckCircle2 size={16} /> : idx + 1}
+                                                    </div>
+                                                    <span>{step}</span>
+                                                    {remediationStep === idx + 1 && isRemediating && (
+                                                        <Loader2 size={16} className="spin" />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {!isRemediating && (
+                                            <button className="btn btn-warning btn-lg full-width" onClick={handleRemediate}>
+                                                <RefreshCw size={18} />
+                                                Auto-Remediate & Retry
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+
+                                {result.decision === 'allowed' && (
+                                    <div className="success-message">
+                                        <Sparkles size={24} />
+                                        <span>User can now securely access {result.destination} through the SSE gateway</span>
+                                    </div>
+                                )}
+                            </div>
                         )}
-                        </>
-                    )}
 
-                    {/* Active Policies Context */}
-                    <div className="policies-context">
-                        <h4>Active Zero Trust Policies</h4>
-                        <div className="context-policies">
-                            {tenantPolicies.slice(0, 4).map(policy => (
-                                <div key={policy.id} className="context-policy">
-                                    <Shield size={14} />
-                                    <span>{policy.name}</span>
-                                </div>
-                            ))}
-                            {tenantPolicies.length > 4 && (
-                                <span className="more-policies">+{tenantPolicies.length - 4} more</span>
-                            )}
+                        {/* Active Policies Context */}
+                        <div className="policies-context">
+                            <h4>Active Zero Trust Policies</h4>
+                            <div className="context-policies">
+                                {tenantPolicies.slice(0, 4).map(policy => (
+                                    <div key={policy.id} className="context-policy">
+                                        <Shield size={14} />
+                                        <span>{policy.name}</span>
+                                    </div>
+                                ))}
+                                {tenantPolicies.length > 4 && (
+                                    <span className="more-policies">+{tenantPolicies.length - 4} more</span>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

@@ -25,7 +25,8 @@ describe('SimulationPage result tile visibility', () => {
 
     expect(screen.queryByRole('heading', { name: 'Policy Evaluation Result' })).not.toBeInTheDocument();
     expect(screen.queryByText('Configure Access Request')).not.toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Active Zero Trust Policies' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Active Zero Trust Policies' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Select User' })).toBeInTheDocument();
   });
 
   it('shows the result tile after clicking Simulate Access Request', async () => {
