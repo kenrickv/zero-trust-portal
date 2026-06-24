@@ -14,6 +14,7 @@ export function SimulationPage() {
     const [showRemediation, setShowRemediation] = useState(false);
     const [isRemediating, setIsRemediating] = useState(false);
     const [remediationStep, setRemediationStep] = useState(0);
+    const [hasSimulated, setHasSimulated] = useState(false);
 
     const tenantUsers = users.filter(u => u.tenantId === currentTenantId && u.status !== 'blocked');
     const tenantDevices = devices.filter(d => d.tenantId === currentTenantId);
@@ -34,17 +35,24 @@ export function SimulationPage() {
     const handleSimulate = async () => {
         if (!selectedUserId || !selectedDeviceId || !selectedDestination) return;
 
+        setHasSimulated(true);
         setIsSimulating(true);
         setResult(null);
         setShowRemediation(false);
 
-        const accessResult = await simulateAccess(selectedUserId, selectedDeviceId, selectedDestination);
+        try {
+            const accessResult = await simulateAccess(selectedUserId, selectedDeviceId, selectedDestination);
 
-        setResult(accessResult);
-        setIsSimulating(false);
+            setResult(accessResult);
+            setIsSimulating(false);
 
-        if (accessResult.decision === 'denied') {
-            setTimeout(() => setShowRemediation(true), 500);
+            if (accessResult.decision === 'denied') {
+                setTimeout(() => setShowRemediation(true), 500);
+            }
+        } catch {
+            setIsSimulating(false);
+            setResult(null);
+            setHasSimulated(false);
         }
     };
 
@@ -91,6 +99,7 @@ export function SimulationPage() {
         setResult(null);
         setShowRemediation(false);
         setRemediationStep(0);
+        setHasSimulated(false);
     };
 
     return (
@@ -234,44 +243,36 @@ export function SimulationPage() {
 
                 {/* Results Panel */}
                 <div className="results-panel">
-                    <h3>
-                        <Shield size={20} />
-                        Policy Evaluation Result
-                    </h3>
+                    {hasSimulated && (
+                        <>
+                        <h3>
+                            <Shield size={20} />
+                            Policy Evaluation Result
+                        </h3>
 
-                    {!result && !isSimulating && (
-                        <div className="empty-result">
-                            <div className="empty-icon">
-                                <Shield size={48} />
-                            </div>
-                            <h4>Configure Access Request</h4>
-                            <p>Select a user, device, and destination to simulate a Zero Trust access decision</p>
-                        </div>
-                    )}
-
-                    {isSimulating && (
-                        <div className="evaluating">
-                            <Loader2 size={48} className="spin" />
-                            <h4>Evaluating Access Request</h4>
-                            <p>Checking identity, device posture, and security policies...</p>
-                            <div className="eval-steps">
-                                <div className="eval-step active">
-                                    <CheckCircle2 size={16} />
-                                    <span>Verifying Identity</span>
-                                </div>
-                                <div className="eval-step active">
-                                    <Loader2 size={16} className="spin" />
-                                    <span>Checking Device Compliance</span>
-                                </div>
-                                <div className="eval-step">
-                                    <span className="eval-pending" />
-                                    <span>Evaluating Policies</span>
+                        {isSimulating && (
+                            <div className="evaluating">
+                                <Loader2 size={48} className="spin" />
+                                <h4>Evaluating Access Request</h4>
+                                <p>Checking identity, device posture, and security policies...</p>
+                                <div className="eval-steps">
+                                    <div className="eval-step active">
+                                        <CheckCircle2 size={16} />
+                                        <span>Verifying Identity</span>
+                                    </div>
+                                    <div className="eval-step active">
+                                        <Loader2 size={16} className="spin" />
+                                        <span>Checking Device Compliance</span>
+                                    </div>
+                                    <div className="eval-step">
+                                        <span className="eval-pending" />
+                                        <span>Evaluating Policies</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {result && (
+                        {result && (
                         <div className={`result-card ${result.decision} animate-scale-in`}>
                             <div className="result-header">
                                 <div className={`result-icon ${result.decision}`}>
@@ -381,6 +382,8 @@ export function SimulationPage() {
                                 </div>
                             )}
                         </div>
+                        )}
+                        </>
                     )}
 
                     {/* Active Policies Context */}
