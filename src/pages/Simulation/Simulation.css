@@ -26,6 +26,10 @@
     min-height: 600px;
 }
 
+.simulation-layout--single {
+    grid-template-columns: 1fr;
+}
+
 /* Config Panel */
 .config-panel {
     display: flex;
