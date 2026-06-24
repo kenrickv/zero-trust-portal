@@ -54,7 +54,7 @@ On blocking failure:
       "body": "The plan for issues #42-#43 does not define behavior when required JWT claims are absent. Define and document the error response, status code, and log behavior before implementation starts.\n\nFiled by: Spec Edge Case agent",
       "type": "chore",
       "priority": "P1",
-      "labels": ["factory:blocked", "dark-factory-generated"]
+      "labels": ["factory:blocked", "nightshift-generated"]
     }
   ]
 }

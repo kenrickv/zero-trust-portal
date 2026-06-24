@@ -46,7 +46,7 @@ On failure:
       "body": "handler.go:42 builds a SQL query by concatenating `req.Query` directly into the string. Use parameterized queries instead.\n\nSeverity: P0\nFound by: Security Auditor panel",
       "type": "bug",
       "priority": "P0",
-      "labels": ["security", "dark-factory-generated"]
+      "labels": ["security", "nightshift-generated"]
     }
   ]
 }
