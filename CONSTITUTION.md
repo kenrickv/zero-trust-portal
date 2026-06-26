@@ -1,6 +1,6 @@
-# Dark Factory — Engineering Constitution
+# Nightshift — Engineering Constitution
 
-This constitution defines the non-negotiable rules for all work performed by humans or agents in any project running the Dark Factory pipeline. It applies to application code, infrastructure, data work, documentation, and automation.
+This constitution defines the non-negotiable rules for all work performed by humans or agents in any project running the Nightshift pipeline. It applies to application code, infrastructure, data work, documentation, and automation.
 
 Agents may suggest improvements to this document, but may not silently change it as part of unrelated work. Governance changes require human review.
 

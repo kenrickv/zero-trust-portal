@@ -67,7 +67,7 @@ useStore.getState().resetToMockData();
 ## Constraints
 - Do NOT modify `src/store/useStore.ts`. It is a hot shared file not owned by this task group; adding `portalName`/notification fields there would widen the change surface and risk conflicts with parallel groups. Branding edit + global propagation and store-backed notification settings are deferred to a follow-up issue.
 - Do NOT modify any page other than the files listed. The only edits outside `src/pages/Settings/` are the route swap in `src/App.tsx` and the one-line `NavLink` className fix in `src/components/Layout.tsx`.
-- New external dependencies are limited to the test toolchain in step 1 (`vitest`, `jsdom`, `@testing-library/{react,dom,user-event,jest-dom}`), justified because the Dark Factory pipeline (CONSTITUTION stages 5–7) requires runnable failing tests before implementation and the repo currently has no test runner. No runtime dependencies are added.
+- New external dependencies are limited to the test toolchain in step 1 (`vitest`, `jsdom`, `@testing-library/{react,dom,user-event,jest-dom}`), justified because the Nightshift pipeline (CONSTITUTION stages 5–7) requires runnable failing tests before implementation and the repo currently has no test runner. No runtime dependencies are added.
 - Settings page styling must use existing CSS variables from `src/index.css`; it must render correctly in both `dark` and `light` `body` classes.
 - Exported component name must be `SettingsPage` (matches the AC and the existing `*Page` export convention).
 

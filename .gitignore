@@ -129,6 +129,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Dark Factory
+# Nightshift
 factory-state.json
 .claudefactory-state.json
